@@ -1,0 +1,120 @@
+@import 'nib'
+
+body
+    absolute top right bottom left
+    overflow-y scroll
+    font-family arial, sans-serif
+    text-rendering optimizeLegibility
+    -webkit-font-smoothing antialiased
+    -moz-osx-font-smoothing grayscale
+    -moz-font-feature-settings "liga" on
+    max-width 800px
+    margin 0 auto
+    background-color #fff
+    -webkit-overflow-scrolling touch
+
+#logo
+    display flex
+    align-items center
+    justify-content center
+    width 100%
+    height 100px
+    .logo-content
+        flex none
+        max-width 50%
+        position relative
+        width 155px
+        height 18px
+    h1
+        position absolute
+        font-size 18px
+        font-family 'Helvetica Neue','Helvetica', 'Arial', sans-serif
+        font-weight 200
+        letter-spacing 1em
+        color black
+    .tint
+        top -50%
+        left -25%
+        height 200%
+        width 150%
+        background-color rgba(0,0,0,0.8)
+        position absolute
+
+.heading
+    font-family jaf-bernino-sans,"Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif
+    font-weight 700
+    text-transform uppercase
+    color rgba(0,0,0,.5)
+    position relative
+    text-align center
+    font-size 11px
+    letter-spacing .3em
+    margin 15px 0
+    &::before
+        content: "";
+        display: block;
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        border-top: 1px solid #ebebeb;    
+    span
+    a
+        display inline-block
+        position relative
+        background #fff
+        padding 3px 8px 2px 12px
+
+body[data-path="hot"] a.hot
+body[data-path="trending"] a.trending
+body[data-path="new"] a.new
+    color rgba(0,0,0,0.8)
+    font-weight 800
+
+#top-posts
+#posts
+    padding-bottom 45px
+
+    article:first-child
+        border-top none
+
+article
+    border-top 1px solid #fafafa
+    padding 15px
+
+.avatar
+    display inline-block
+    border-radius 999em
+    height 15px
+    width 15px
+    background-color #f0f0f0
+    background-size cover
+    background-position center
+    background-repeat no-repeat
+    vertical-align top
+
+.title
+    font-family Georgia,Cambria,"Times New Roman",Times,serif
+    font-weight 400
+    line-height 1.45
+    letter-spacing .005rem
+    display block
+    padding 10px 0
+    word-wrap break-word
+    &:hover
+        text-decoration underline
+
+.source
+    span
+        font-family jaf-bernino-sans,"Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif
+        font-weight 100
+        letter-spacing -0.02em
+        font-size 12px
+        display inline-block
+        color rgba(0,0,0,0.3)
+        font-weight 100
+        padding 5px
+    .source-title
+        color rgba(0,0,0,0.6)
+
+a
+    cursor pointer
