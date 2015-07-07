@@ -3,6 +3,19 @@
 var posts = document.getElementById('posts');
 var topPosts = document.getElementById('top-posts');
 
+function onPause() {
+    window.localStorage.setItem('lastPause', new Date());
+}
+
+function onResume() {
+    var lastPause = window.localStorage.getItem('lastPause');
+    var diff = new Date().getTime() - new Date(lastPause).getTime();
+
+    if (diff > (1000 * 60 * 15)) {
+	init();
+    }
+}
+
 function onDeviceReady() {
     if (StatusBar) {
 	StatusBar.hide();
@@ -10,7 +23,8 @@ function onDeviceReady() {
 	StatusBar.backgroundColorByName('white');
     }
 
-    document.addEventListener('resume', init, false);
+    document.addEventListener('resume', onResume, false);
+    document.addEventListener('pause', onPause, false);
 }
 
 function createElem(type, c) {
