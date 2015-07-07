@@ -17,6 +17,9 @@ update:	npm cordova
 deploy:
 	grunt
 	rsync -av --delete ./index.html deploy@52.8.251.150:/home/deploy/app/index.html
+	rsync -av --delete ./favicon.ico deploy@52.8.251.150:/home/deploy/app/favicon.ico
+	rsync -av --delete ./resources/icon.png deploy@52.8.251.150:/home/deploy/app/icon.png
+
 
 build_mobile: update
 	grunt
