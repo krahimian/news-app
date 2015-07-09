@@ -104,6 +104,13 @@ var Post = function(data, parent) {
     }
     article.appendChild(title);
 
+    var meta = createElem('div', 'meta');
+    article.appendChild(meta);
+
+    var hostname = createElem('span', 'hostname');
+    hostname.innerHTML = title.hostname;
+    meta.appendChild(hostname);
+
     parent.appendChild(article);
 };
 
