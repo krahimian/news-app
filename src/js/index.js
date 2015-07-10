@@ -11,7 +11,7 @@ function onResume() {
     var lastPause = window.localStorage.getItem('lastPause');
     var diff = new Date().getTime() - new Date(lastPause).getTime();
 
-    if (diff > (1000 * 60 * 15)) {
+    if (diff > (1000 * 60 * 30)) {
 	init();
     }
 }
