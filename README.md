@@ -1,1 +1,3 @@
-# T3RR0R NEWS
+# ZERØ.NEWS
+
+A simple news feed. http://zer0.news
