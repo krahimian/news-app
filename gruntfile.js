@@ -1,3 +1,6 @@
+/* global module, require */
+
+var modRewrite = require('connect-modrewrite');
 
 module.exports = function(grunt) {
 
@@ -79,6 +82,29 @@ module.exports = function(grunt) {
 		files: [{
 		    'tmp/index.html': ['src/views/index.jade']
 		}]
+	    },
+	    partials: {
+		files: [{
+		    expand: true,
+		    src: ['**/*.jade'],
+		    dest: 'tmp/',
+		    cwd: 'src/views/partials/',
+		    ext: '.html'
+		}]
+	    }
+	},
+
+	inline_angular_templates: {
+	    index: {
+		options: {
+		    base: 'tmp',
+		    prefix: '/',
+		    selector: 'body',
+		    method: 'prepend'
+		},
+		files: {
+		    'tmp/index.html': ['tmp/**/*.html', '!tmp/index.html']
+		}
 	    }
 	},
 
@@ -115,8 +141,43 @@ module.exports = function(grunt) {
 
 	watch: {
 	    index: {
-		files: ['src/views/**/*.jade', 'src/**/*.js', 'bower_components/**/*', 'src/css/**/*'],
+		files: ['gruntfile.js', 'src/views/**/*.jade', 'src/**/*.js', 'bower_components/**/*', 'src/css/**/*'],
 		tasks: ['default']
+	    }
+	},
+
+	connect: {
+	    server: {
+		options: {
+		    keepalive: true,
+		    debug: true,
+		    port: 9000,
+		    base: 'www',
+		    open: {
+			target: 'http://localhost:9000',
+			appName: 'Google Chrome'
+		    },
+		    middleware: function (connect, options) {
+			var middlewares = [];
+
+			middlewares.push(modRewrite([
+			    '!\\.ico|\\.jpg|\\.css|\\.js|\\.png|\\woff|\\ttf|\\.swf$ /index.html'
+			]));
+
+			if (!Array.isArray(options.base)) {
+			    options.base = [options.base];
+			}
+
+			var directory = options.directory || options.base[options.base.length - 1];
+			options.base.forEach(function (base) {
+			    middlewares.push(connect.static(base));
+			});
+
+			middlewares.push(connect.directory(directory));
+
+			return middlewares;
+		    }
+		}
 	    }
 	}
     });
@@ -131,6 +192,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('after', [
 	'uglify',
+	'jade:partials',
+	'inline_angular_templates',
 	'staticinline',
 	'inline',
 	'copy',	
@@ -156,6 +219,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-inline');
     grunt.loadNpmTasks('grunt-static-inline');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-watch');    
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-inline-angular-templates');
 
 };

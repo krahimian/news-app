@@ -3,6 +3,12 @@
 var posts = document.getElementById('posts');
 var topPosts = document.getElementById('top-posts');
 
+function getHostname(url) {
+    var l = document.createElement("a");
+    l.href = url;
+    return l.hostname.replace('www.','');
+}
+
 function onPause() {
     window.localStorage.setItem('lastPause', new Date());
 }
@@ -29,7 +35,7 @@ function onDeviceReady() {
 
 function createElem(type, c) {
     var ele = document.createElement(type);
-    ele.classList.add(c);
+    if (c) ele.className = c;
     return ele;
 }
 
@@ -86,12 +92,12 @@ var Post = function(data, parent) {
     date.innerHTML = fromNow(data.created_at);
     source.appendChild(date);
 
-    var score = createElem('span');
-    var percentage = data.social_score_avg ?
-	    Math.round((data.social_score / data.social_score_avg) * 100 - 100) :
-	    Math.round((data.score / data.score_avg) * 100 - 100);
-    score.innerHTML =  (percentage > 0 ? '+' : '') + percentage + '%';
-    source.appendChild(score);
+    // var score = createElem('span');
+    // var percentage = data.social_score_avg ?
+    // 	    Math.round((data.social_score / data.social_score_avg) * 100 - 100) :
+    // 	    Math.round((data.score / data.score_avg) * 100 - 100);
+    // score.innerHTML =  (percentage > 0 ? '+' : '') + percentage + '%';
+    // source.appendChild(score);
 
     var title = createElem('a', 'title');
     title.innerHTML = data.title;
@@ -107,9 +113,38 @@ var Post = function(data, parent) {
     var meta = createElem('div', 'meta');
     article.appendChild(meta);
 
-    var hostname = createElem('span', 'hostname');
-    hostname.innerHTML = title.hostname;
+    var hostname = createElem('a', 'hostname');
+
+    if (window.cordova) {
+	hostname.onclick = function() {
+	    cordova.InAppBrowser.open(data.content_url || data.url, '_system', 'location=no,enableViewportScale=yes');
+	};
+    } else {
+	hostname.href = data.content_url || data.url;
+    }
+
+    hostname.innerHTML = getHostname(data.content_url || data.url);
     meta.appendChild(hostname);
+
+    if (data.content_url && data.content_url !== data.url) {
+
+	var via = createElem('span');
+	via.innerHTML = ' via ';
+	meta.appendChild(via);
+
+	var comments = createElem('a');
+
+	if (window.cordova) {
+	    comments.onclick = function() {
+		cordova.InAppBrowser.open(data.url, '_system', 'location=no,enableViewportScale=yes');
+	    };
+	} else {
+	    comments.href = data.url;
+	}
+
+	comments.innerHTML = getHostname(data.url);
+	meta.appendChild(comments);
+    }
 
     parent.appendChild(article);
 };
@@ -124,11 +159,20 @@ var serialize = function(obj) {
     return str.join("&");
 };
 
+var loading = function(opts) {
+    var elem = createElem('div', 'md-loading indeterminate');
+    elem.innerHTML = document.getElementById('/loading.html').innerHTML;
+    return elem;
+};
+
 var load = function(path, params, parent) {
+    parent.innerHTML = '';
+    parent.appendChild(loading());
     posts.setAttribute('data-offset', params.offset || 0);
     document.body.setAttribute('data-path', path);
     var url = apiEndpoint + path + '?' + serialize(params);
     window.Request.get(url).success(function(posts) {
+	parent.innerHTML = '';
 	posts.forEach(function(post) {
 	    Post(post, parent);
 	});
@@ -136,21 +180,17 @@ var load = function(path, params, parent) {
 };
 
 var init = function() {
-    console.log('initializing');
-    topPosts.innerHTML = '';
     load('top', {
 	offset: 0,
 	limit: 3
     }, topPosts);
 
-    posts.innerHTML = '';
     load('hot', {
 	offset: 0
     }, posts);
 };
 
 var reload = function(path) {
-    posts.innerHTML = '';
     load(path, {
 	offset: 0
     }, posts);
