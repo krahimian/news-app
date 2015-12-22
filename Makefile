@@ -1,5 +1,6 @@
 CPLATFORM=cordova platform
 CPLUGIN=cordova plugin
+IP=52.9.51.222
 
 cordova:
 	if [ ! -d './platforms/ios' ]; then $(CPLATFORM) add ios; fi
@@ -16,9 +17,9 @@ update:	npm cordova
 
 deploy:
 	grunt
-	rsync -av --delete ./index.html deploy@52.8.251.150:/home/deploy/app/index.html
-	rsync -av --delete ./favicon.ico deploy@52.8.251.150:/home/deploy/app/favicon.ico
-	rsync -av --delete ./resources/icon.png deploy@52.8.251.150:/home/deploy/app/icon.png
+	rsync -av --delete ./index.html deploy@$(IP):/home/deploy/app/index.html
+	rsync -av --delete ./favicon.ico deploy@$(IP):/home/deploy/app/favicon.ico
+	rsync -av --delete ./resources/icon.png deploy@$(IP):/home/deploy/app/icon.png
 
 
 build_mobile: update
