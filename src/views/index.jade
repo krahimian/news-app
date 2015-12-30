@@ -17,18 +17,17 @@ html
 
         link(rel='stylesheet', href='app.css', inline='true')
     body
-        h1#logo ZER&Oslash;
+        h1#logo ZER&Oslash;.
+        select#channel
 
         .heading
-            span Top Stories Today
-        #top-posts
+            span Top
+
+        #lead
 
         .heading
-            a.hot(onclick="reload('hot')") Hot
-            span /
-            a.trending(onclick="reload('trending')") Trending
-            span /
-            a.new(onclick="reload('new')") New
+            span Trending
+
         #posts
 
     script(src='vendor.js?__inline=true')

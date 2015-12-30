@@ -191,7 +191,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('after', [
-	'uglify',
+	//'uglify',
 	'jade:partials',
 	'inline_angular_templates',
 	'staticinline',

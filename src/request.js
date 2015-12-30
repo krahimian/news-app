@@ -10,6 +10,15 @@
 
     'use strict';
 
+    var serialize = function(obj) {
+	var str = [];
+	for(var p in obj)
+	    if (obj.hasOwnProperty(p)) {
+		str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+	    }
+	return str.join("&");
+    };
+
     var parse = function (req) {
 	var result;
 	try {
@@ -59,18 +68,19 @@
 	return {
 	    success: function (callback) {
 		methods.success = callback;
-		return methods;
+		return this;
 	    },
 	    error: function (callback) {
 		methods.error = callback;
-		return methods;
+		return this;
 	    }
 	};
     };
 
     return {
-	get: function(src) {
-	    return xhr('GET', src);
+	get: function(url, data) {
+	    if (data) url += '?' + serialize(data);
+	    return xhr('GET', url);
 	},
 	put: function(url, data) {
 	    return xhr('PUT', url, data);
@@ -78,7 +88,8 @@
 	post: function(url, data) {
 	    return xhr('POST', url, data);
 	},
-	del: function(url) {
+	del: function(url, data) {
+	    if (data) url += '?' + serialize(data);
 	    return xhr('DELETE', url);
 	}
     };
