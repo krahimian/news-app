@@ -81,11 +81,8 @@ function onDeviceReady() {
     document.addEventListener('resume', onResume, false);
     document.addEventListener('pause', onPause, false);
 
-    if (window.StatusBar) {
+    if (typeof StatusBar !== 'undefined')
 	StatusBar.hide();
-	StatusBar.overlaysWebView(false);
-	StatusBar.backgroundColorByName('white');
-    }
 
     if (window.cordova) {
 	channel = 'news';
@@ -101,8 +98,7 @@ function onDeviceReady() {
     loadChannels();
 }
 
-if (!(!window.cordova && !window.PhoneGap && !window.phonegap)) {
-    document.addEventListener('deviceready', onDeviceReady, false);
-} else {
-    document.addEventListener('DOMContentLoaded', onDeviceReady, false);
-}
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.cordova) document.addEventListener('deviceready', onDeviceReady, false);
+    else onDeviceReady();
+}, false);
