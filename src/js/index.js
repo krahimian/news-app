@@ -1,9 +1,7 @@
 /* global Statusbar, document */
 
 var API = 'http://52.9.51.222:8080/api';
-var posts = document.getElementById('posts');
-var lead = document.getElementById('lead');
-var channel;
+var trending, lead, latest, channel;
 
 var loading = function(opts) {
     var elem = createElem('div', 'md-loading indeterminate');
@@ -14,7 +12,6 @@ var loading = function(opts) {
 var load = function(path, params, parent) {
     parent.innerHTML = '';
     parent.appendChild(loading());
-    posts.setAttribute('data-offset', params.offset || 0);
     document.body.setAttribute('data-path', path);
 
     var url = API + '/channels/' + channel + path;
@@ -59,9 +56,13 @@ var init = function() {
 	limit: 3
     }, lead);
 
-    load('/posts', {
+    load('/trending', {
 	offset: 0
-    }, posts);
+    }, trending);
+
+    load('/latest', {
+	offset: 0
+    }, latest);
 };
 
 function onPause() {
@@ -78,6 +79,10 @@ function onResume() {
 }
 
 function onDeviceReady() {
+    trending = document.getElementById('trending');
+    latest = document.getElementById('latest');
+    lead = document.getElementById('lead');
+
     document.addEventListener('resume', onResume, false);
     document.addEventListener('pause', onPause, false);
 
