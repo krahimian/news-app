@@ -61,7 +61,8 @@ var init = function() {
     }, trending);
 
     load('/latest', {
-	offset: 0
+	offset: 0,
+	limit: 3
     }, latest);
 };
 
