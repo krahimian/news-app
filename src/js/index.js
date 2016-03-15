@@ -42,8 +42,7 @@ var loadChannels = function() {
 	});
 
 	document.getElementById('channel').onchange = function(e) {
-	    channel = e.target.value;
-	    init();
+	    window.location.href = '/' + e.target.value;
 	};
     }).error(function(err) {
 	console.error(err);
