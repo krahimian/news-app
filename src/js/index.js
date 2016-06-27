@@ -42,7 +42,13 @@ var loadChannels = function() {
 	});
 
 	document.getElementById('channel').onchange = function(e) {
-	    window.location.href = '/' + e.target.value;
+	    var n = e.target.value;
+	    if (window.cordova) {
+		channel = n;
+		init();
+	    } else {
+		window.location.href = '/' + e.target.value;
+	    }
 	};
     }).error(function(err) {
 	console.error(err);
