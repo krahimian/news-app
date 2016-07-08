@@ -82,4 +82,6 @@ function Post(data, parent) {
     }
 
     parent.appendChild(article);
+
+    return article;
 }

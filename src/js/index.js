@@ -3,6 +3,32 @@
 var API = 'http://52.9.51.222:8080/api';
 var trending, lead, latest, channel;
 
+var parameters = {
+    top: {
+	path: '/top',
+	params: {
+	    limit: 10,
+	    offset: 0,
+	    age: 168
+	}
+    },
+    trending: {
+	path: '/trending',
+	params: {
+	    decay: 80000,
+	    age: 36
+	}
+    },
+    latest: {
+	path: '/trending',
+	params: {
+	    decay: 1800,
+	    age: 12,
+	    limit: 5
+	}
+    }
+};
+
 var loading = function(opts) {
     var elem = createElem('div', 'md-loading indeterminate');
     elem.innerHTML = document.getElementById('/loading.html').innerHTML;
@@ -19,7 +45,10 @@ var load = function(path, params, parent) {
     window.Request.get(url, params).success(function(posts) {
 	parent.innerHTML = '';
 	posts.forEach(function(post) {
-	    Post(post, parent);
+	    var elem = Post(post, parent);
+	    post.related && post.related.forEach(function(p) {
+		Post(p, elem);
+	    });
 	});
     }).error(function(err) {
 	console.error(err);
@@ -56,19 +85,9 @@ var loadChannels = function() {
 };
 
 var init = function() {
-    load('/top', {
-	offset: 0,
-	limit: 3
-    }, lead);
-
-    load('/trending', {
-	offset: 0
-    }, trending);
-
-    load('/latest', {
-	offset: 0,
-	limit: 3
-    }, latest);
+    load(parameters['top'].path, parameters['top'].params, lead);
+    load(parameters['trending'].path, parameters['trending'].params, trending);
+    load(parameters['latest'].path, parameters['latest'].params, latest);
 };
 
 function onPause() {
