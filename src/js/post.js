@@ -1,30 +1,26 @@
 function Post(data, parent) {
     var article = document.createElement('article');
 
-    // var header = createElem('div', 'header');
-    // article.appendChild(header);
+    if (data.related.length) {
+	var heading = createElem('div', 'heading');
+	var heading_title = createElem('span');
+	var t = [];
 
-    // var source = createElem('div', 'source');
-    // header.appendChild(source);
+	if (data.related_concepts.length)
+	    t.push(data.related_concepts[0].text);
+	if (data.related_keywords.length)
+	    t.push(data.related_keywords[0].text);
+	if (data.related_entities.length)
+	    t.push(data.related_entities[0].text);
 
-    // var source_logo = createElem('div', 'avatar');
-    // if (data.source_logo_url) {
-    // 	if (data.source_logo_url.substring(0,2) === '//') data.source_logo_url = 'http:' + data.source_logo_url;
-    // 	source_logo.style['background-image'] = 'url(' + data.source_logo_url + ')';
-    // }
-    // source_logo.style['padding'] = '10px';
-    // source.appendChild(source_logo);
-
-    // var source_title = createElem('span', 'source-title');
-    // source_title.innerHTML = data.source_title;
-    // source.appendChild(source_title);
-
-    // var score = createElem('span');
-    // var percentage = data.social_score_avg ?
-    // 	    Math.round((data.social_score / data.social_score_avg) * 100 - 100) :
-    // 	    Math.round((data.score / data.score_avg) * 100 - 100);
-    // score.innerHTML =  (percentage > 0 ? '+' : '') + percentage + '%';
-    // source.appendChild(score);
+	var uniqueArray = t.filter(function(item, pos) {
+	    return t.indexOf(item) == pos;
+	});
+	console.log(uniqueArray);
+	heading_title.innerHTML = uniqueArray.join(', ');
+	heading.appendChild(heading_title);
+	article.appendChild(heading);
+    }
 
     var title = createElem('a', 'title');
     title.innerHTML = data.title;

@@ -1,28 +1,20 @@
 /* global Statusbar, document */
 
 var API = 'http://52.9.51.222:8080/api';
-var trending, lead, latest, channel;
+var today, now, channel, lead;
 
 var parameters = {
-    top: {
-	path: '/top',
-	params: {
-	    limit: 10,
-	    offset: 0,
-	    age: 168
-	}
-    },
-    trending: {
+    today: {
 	path: '/trending',
 	params: {
 	    decay: 80000,
 	    age: 36
 	}
     },
-    latest: {
+    now: {
 	path: '/trending',
 	params: {
-	    decay: 1800,
+	    decay: 7200,
 	    age: 12,
 	    limit: 5
 	}
@@ -45,10 +37,15 @@ var load = function(path, params, parent) {
     window.Request.get(url, params).success(function(posts) {
 	parent.innerHTML = '';
 	posts.forEach(function(post) {
-	    var elem = Post(post, parent);
-	    post.related && post.related.forEach(function(p) {
-		Post(p, elem);
-	    });
+	    if (post.related.length) {
+		var l = lead.appendChild(createElem('section'));
+		Post(post, l);
+		post.related.forEach(function(p) {
+		    Post(p, l);
+		});
+	    } else {
+		Post(post, parent);
+	    }
 	});
     }).error(function(err) {
 	console.error(err);
@@ -57,37 +54,10 @@ var load = function(path, params, parent) {
     });
 };
 
-var loadChannels = function() {
-    window.Request.get(API + '/channels').success(function(channels) {
-	channels = channels.filter(function(c) {
-	    return c.name !== channel;
-	});
-
-	channels.forEach(function(c) {
-	    var option = createElem('option');
-	    option.text = c.name;
-
-	    document.getElementById('channel').add(option);
-	});
-
-	document.getElementById('channel').onchange = function(e) {
-	    var n = e.target.value;
-	    if (window.cordova) {
-		channel = n;
-		init();
-	    } else {
-		window.location.href = '/' + e.target.value;
-	    }
-	};
-    }).error(function(err) {
-	console.error(err);
-    });
-};
-
 var init = function() {
-    load(parameters['top'].path, parameters['top'].params, lead);
-    load(parameters['trending'].path, parameters['trending'].params, trending);
-    load(parameters['latest'].path, parameters['latest'].params, latest);
+    lead.innerHTML = '';
+    load(parameters['today'].path, parameters['today'].params, today);
+    load(parameters['now'].path, parameters['now'].params, now);
 };
 
 function onPause() {
@@ -104,8 +74,8 @@ function onResume() {
 }
 
 function onDeviceReady() {
-    trending = document.getElementById('trending');
-    latest = document.getElementById('latest');
+    today = document.getElementById('today');
+    now = document.getElementById('now');
     lead = document.getElementById('lead');
 
     document.addEventListener('resume', onResume, false);
@@ -120,12 +90,7 @@ function onDeviceReady() {
 	channel = window.location.pathname.substring(1) || 'news';
     }
 
-    var option = createElem('option');
-    option.text = channel;
-    document.getElementById('channel').add(option);
-
     init();
-    loadChannels();
 }
 
 document.addEventListener('DOMContentLoaded', function() {

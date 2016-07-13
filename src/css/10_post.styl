@@ -2,24 +2,9 @@
 @import 'nib'
 
 article
+    position relative
     border-top 1px solid #f6f6f6
-    padding 15px 15px 0
-    &:before
-    &:after
-        content " "
-        display table
-    &:after
-        clear both
-    > article
-        padding 15px 15px 0 25px
-        position relative
-        &:before
-            absolute top left bottom
-            content " "
-            display block
-            background #f0f0f0
-            height 100%
-            width 15px
+    padding 15px 0
 
 .title
     font-family Georgia,Cambria,"Times New Roman",Times,serif
@@ -27,14 +12,14 @@ article
     line-height 1.45
     letter-spacing .005rem
     display block
-    padding 10px 0
+    padding 10px 15px
     word-wrap break-word
     &:hover
         text-decoration underline
 
 .meta
     font-size 11px
-    padding-bottom 15px
+    padding 0 15px 15px
     color rgba(0,0,0,0.3)
     a
         color #57ad68
