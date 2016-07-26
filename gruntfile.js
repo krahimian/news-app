@@ -13,6 +13,7 @@ module.exports = function(grunt) {
 		files: {
 		    'tmp/vendor.js': [
 			//libraries
+			'src/element.js',
 			'src/request.js'
 		    ]
 		}

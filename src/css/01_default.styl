@@ -40,7 +40,8 @@ body
     text-transform uppercase
     color rgba(0,0,0,.6)
     position relative
-    font-size 0.8rem
+    font-size 0.5rem
+    line-height 1rem
     margin 15px 0
     &::before
         content ""
@@ -56,14 +57,11 @@ body
         background #fff
         padding 3px 8px 2px 12px
 
-body[data-path="hot"] a.hot
-body[data-path="trending"] a.trending
-body[data-path="new"] a.new
-    color rgba(0,0,0,0.8)
-    font-weight 800
-
 section
-    padding-bottom 35px
+    margin-bottom 25px
+    overflow hidden
+    &:empty
+        display none
 
     article:first-child
         border-top none

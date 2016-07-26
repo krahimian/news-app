@@ -1,13 +1,14 @@
-function getHostname(url) {
-    var l = document.createElement("a");
-    l.href = url;
-    return l.hostname.replace('www.','');
+function log(msg) {
+    console.log(msg);
+    var span = Elem.create({ tag: 'span' });
+    span.innerHTML = msg;
+    document.getElementById('log').appendChild(span);
 }
 
-function createElem(type, c) {
-    var ele = document.createElement(type);
-    if (c) ele.className = c;
-    return ele;
+function getHostname(url) {
+    var l = document.createElement('a');
+    l.href = url;
+    return l.hostname.replace('www.','');
 }
 
 function fromNow(nd) {
